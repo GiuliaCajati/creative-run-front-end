@@ -20,14 +20,6 @@ import 'leaflet-geosearch/dist/geosearch.css';
 const Map = () => {
     const [data, setData] = useState()
     
-    const returnPolylines = (marker) => {
-        return marker.add_polyline.forEach(coordinates => {
-            return coordinates + ','
-        })
-    }
-
-    
-    
     const runner = new Icon({
         iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
         iconSize: [25, 25]
@@ -90,54 +82,40 @@ return(
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
                 
-             
                 <div>
                     {data[0].markers.map((marker, i) => { 
-                        //debugger
-
-                        return<div>
-                            
-                        <Marker 
-                            icon={runner}
-                            key = {marker.id} 
-                            position={[
-                                marker.latitude, 
-                                marker.longitude
-                            ]}
-                            routeWhileDragging={true}
-                          
-                            draggable={true}>
-                            
-                            <Popup minWidth={90}>
-                                <span>
-                                Distance From Previous: {marker.distance_from_prev}
-                                </span>
-                            </Popup>
-                            
+                        debugger
+                        return<div>          
                     
-                            </Marker>
                             {marker.add_polyline === null?
                                 null:
-                            // returnPolylines(marker)?
-                            //     null:
-                                
-
                              <Polyline key={1} 
-                             
-                             positions={[
+                        
+                             positions={ marker.add_polyline } color={'blue'} />}
                                 
-                                //start 
-                                [data[0].markers[i-1].latitude,
-                                data[0].markers[i-1].longitude], 
-                                //finish
-                                [marker.latitude,
-                                marker.longitude],
-                                [marker.add_polyline[0][1],
-                                    marker.add_polyline[0][0]]
-                                // returnPolylines(marker),
-                               
-                              ]} color={'red'} />}  
-                           
+                                <Marker 
+                                    icon={runner}
+                                    key = {marker.id} 
+                                    position={[
+                                        marker.latitude, 
+                                        marker.longitude
+                                    ]}
+                                    routeWhileDragging={true}
+                                
+                                    draggable={true}>
+                                    
+                                    <Popup minWidth={90}>
+                                        <span>
+                                        Markers Details 
+                                            <ul>
+                                            <li>Place: {marker.place}</li>
+                                            <li>Distance From Previous: {marker.distance_from_prev}</li>
+                                            <li>Polyline: {marker.add_polyline}</li>
+                                            </ul>
+                                        </span>
+                                    </Popup>
+                            
+                                </Marker>
                             </div>
                       
                         })}
