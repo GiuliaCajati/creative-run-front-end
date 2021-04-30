@@ -1,29 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import { MapContainer, TileLayer, Marker, Popup, FeatureGroup, Circle, useMap, Polyline } from 'react-leaflet'
 import { Icon } from 'leaflet';
 import { EditControl } from 'react-leaflet-draw';
-import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import { GeoSearchControl, OpenStreetMapProvider, getLatLng } from "leaflet-geosearch";
 import 'leaflet-geosearch/dist/geosearch.css';
 
-// Next steps
-// 1. Show polyline for each marker
-    // Make addPolyline method (API request to OSRM)
-    // a. save polyline to a variable (each marker can store polyline that points to prev marker) 
-    // b. on pageload addPolyline for each marker 
-    
-// 2. Make New Drawing: 
-    // a. Add Marker ... addPolyline
-    // b. Edit Marker
-    // c. Delete Marker 
-// 3. Option to show all images or select from list 
+const center = {
+    lat: 51.505,
+    lng: -0.09,
+  }
 
 const Map = () => {
+    const [draggable, setDraggable] = useState(true)
     const [data, setData] = useState()
-    
+    const markerRef = useRef(null)
+    const [position, setPosition] = useState(center)
     const runner = new Icon({
         iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
         iconSize: [25, 25]
     })
+
+    const eventHandlers = useMemo(
+        () => ({
+          dragend() {debugger
+              
+            const marker = markerRef.current
+            if (marker != null) {
+                debugger
+              setPosition(marker.getLatLng())
+            }
+          },
+        }),
+        [],
+      )
+      const toggleDraggable = useCallback(() => {
+        setDraggable((d) => !d)
+      }, [])
+
  
     useEffect(() => {
       fetch('http://localhost:3000/drawings')
@@ -61,19 +74,22 @@ return(
          <div>
              
              <MapContainer center={[38.9072, -77.0369]} zoom={15} stroke={true}>
-    
-
+               
                 <LeafletgeoSearch />
                 <FeatureGroup>
                     <EditControl
                     position='topright'
                     marker={{
-                        icon: runner
+                        icon: runner,
+                        draggable: true
                     }}
+                    
                     draw={{
                         rectangle: false
                     }}
                     />
+                    
+                 
                     <Circle center={[51.51, -0.06]} radius={200} />
                 </FeatureGroup>
                 
@@ -81,12 +97,14 @@ return(
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
+                  {/* getLatLng() */}
+    {/* moveend */}
                 
                 <div>
                     {data[0].markers.map((marker, i) => { 
-                        debugger
+                        
                         return<div>          
-                    
+                         
                             {marker.add_polyline === null?
                                 null:
                              <Polyline key={1} 
@@ -94,6 +112,8 @@ return(
                              positions={ marker.add_polyline } color={'blue'} />}
                                 
                                 <Marker 
+                                    ref={markerRef}
+                                    eventHandlers={eventHandlers}
                                     icon={runner}
                                     key = {marker.id} 
                                     position={[
@@ -101,9 +121,10 @@ return(
                                         marker.longitude
                                     ]}
                                     routeWhileDragging={true}
-                                
-                                    draggable={true}>
-                                    
+                                    draggable={draggable}        
+                                                  
+                                    >
+                    
                                     <Popup minWidth={90}>
                                         <span>
                                         Markers Details 
@@ -111,6 +132,7 @@ return(
                                             <li>Place: {marker.place}</li>
                                             <li>Distance From Previous: {marker.distance_from_prev}</li>
                                             <li>Polyline: {marker.add_polyline}</li>
+                                            <li>Latitude: {marker.latitude}</li>
                                             </ul>
                                         </span>
                                     </Popup>
