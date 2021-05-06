@@ -31,40 +31,38 @@ const Map = () => {
 
     function LeafletgeoSearch() {
         const map = useMap();
-      
         useEffect(() => {
           const provider = new OpenStreetMapProvider();
-      
           const searchControl = new GeoSearchControl({
-            provider,
-            // marker: { runner }
+            provider,// marker: { runner }
           });
           map.addControl(searchControl);
           return () => map.removeControl(searchControl);
         }, []);
-      
         return null;
     }
 
+    const toggleDraggable = (markerID) => {
+      setSelectedMarker(markerID)
+      if (markerID) {
+          setDraggable(true)
+      }
+    }
 
     const eventHandlers = useMemo(
         () => ({
           dragend() {
-            debugger
             const marker = markerRef.current
             if (marker != null) {
-            debugger
               setPosition(markerID, marker.getLatLng())
             }
           },
         }),
         [],
       )
-      const toggleDraggable = useCallback(() => {
-        setDraggable((d) => !d)
-      }, [])
 
-      const setPosition = (markerId, updatedCoordinates) => {
+      const setPosition = (markerId, updatedCoordinates) => { 
+        debugger
         fetch(`http://localhost:3000/markers/${markerId}`, {
             method: "PATCH",
             headers: {
@@ -77,11 +75,7 @@ const Map = () => {
         })
             .then(res => res.json())   
       }
-      
-
-
-      
-
+    
 return(
     <div>
         {data 
@@ -90,8 +84,7 @@ return(
              
              <MapContainer center={[38.9072, -77.0369]} zoom={15} stroke={true}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-            
-               
+    
                 {/* B&W: https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png */}
                 <LeafletgeoSearch />
                 
@@ -107,8 +100,6 @@ return(
                     <Circle center={[51.51, -0.06]} radius={200} />
                 </FeatureGroup>
                 
-                
- 
                 <div>
                     {data[0].markers.map((marker, i) => { 
                         
@@ -120,42 +111,36 @@ return(
                         
                              positions={ marker.add_polyline } color={'blue'} />}
                                 
-                                <Marker 
-                                    ref={ markerRef }
-                                    eventHandlers={   eventHandlers, 
-                                                    { click: (e) => {
-                                                        setSelectedMarker(marker.id)
-                                                        if (markerID === marker.id) {
-                                                            setDraggable(true)
-                                                            console.log(eventHandlers) 
-                                                        } else {
-                                                            setDraggable(false)
-                                                        }
-                                                    }}
-                                                   }
-                                    // eventHandlers={ eventHandlers }
-                                   
-                                    icon={ runner }
-                                    key = { marker.id } 
-                                    position={ [ marker.latitude, marker.longitude ] }
-                                    routeWhileDragging={true}
-                                    draggable = { draggable } 
-                                    
-                                    >
-                    
-                                    <Popup minWidth={90}>
-                                        <span>
-                                        Markers Details 
-                                            <ul>
-                                            <li>Place: {marker.place}</li>
-                                            <li>Distance From Previous: {marker.distance_from_prev}</li>
-                                            <li>Polyline: {marker.add_polyline}</li>
-                                            <li>Latitude: {marker.latitude}</li>
-                                            </ul>
-                                        </span>
-                                    </Popup>
-                            
-                                </Marker>
+                              <Marker 
+                                  ref={ markerRef }
+                                  eventHandlers={ eventHandlers }
+                                  icon={ runner }
+                                  key = { marker.id } 
+                                  position={ [ marker.latitude, marker.longitude ] }
+                                  routeWhileDragging={true}
+                                  draggable = { draggable } 
+                                  >
+      
+                                <Popup minWidth={90}>
+                                  <div>
+                                    <span onClick={() => toggleDraggable(marker.id)}>
+                                      {draggable
+                                        ? 'Marker is draggable'
+                                        : 'Click here to make marker draggable'}
+                                    </span>
+                                    <span>
+                                    Markers Details 
+                                        <ul>
+                                        <li>Place: {marker.place}</li>
+                                        <li>Distance From Previous: {marker.distance_from_prev}</li>
+                                        <li>Polyline: {marker.add_polyline}</li>
+                                        <li>Latitude: {marker.latitude}</li>
+                                        </ul>
+                                    </span>
+                                  </div>
+                                </Popup>
+                          
+                              </Marker>
                             </div>
                       
                         })}
