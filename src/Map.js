@@ -45,7 +45,7 @@ const Map = () => {
     const toggleDraggable = (markerID) => {
       setSelectedMarker(markerID)
       if (markerID) {
-          setDraggable(true)
+        setDraggable(true)
       }
     }
 
@@ -54,16 +54,17 @@ const Map = () => {
           dragend() {
             const marker = markerRef.current
             if (marker != null) {
-              setPosition(markerID, marker.getLatLng())
+              setPosition(marker.getLatLng())
+              setDraggable(false)
             }
           },
         }),
         [],
       )
 
-      const setPosition = (markerId, updatedCoordinates) => { 
+      const setPosition = ( updatedCoordinates ) => { 
         debugger
-        fetch(`http://localhost:3000/markers/${markerId}`, {
+        fetch(`http://localhost:3000/markers/${markerID}`, {
             method: "PATCH",
             headers: {
                 'Content-Type': 'application/json',
