@@ -1,14 +1,9 @@
 
 import './App.css';
-import Map from './Map.js'
-
+import Map from './containers/Map.js'
 
 export default function App() {
-
-  
   return (
-    <Map>
-
-    </Map>
+    <Map/>
   );
 }
