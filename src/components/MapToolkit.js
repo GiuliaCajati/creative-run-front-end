@@ -25,20 +25,19 @@ const MapToolkit = () => {
     return null;
   }
 
-
   return (
     <div>
       <LeafletgeoSearch />
       <FeatureGroup>
-                    <EditControl
-                    position='topright'
-                    marker={{
-                        icon: runner,
-                        draggable: true
-                    }}
-                    draw={{ rectangle: false }}
-                    />
-                    <Circle center={[51.51, -0.06]} radius={200} />
+        <EditControl
+          position='topright'
+          marker={{
+              icon: runner,
+              draggable: true
+          }}
+          draw={{ rectangle: false }}
+        />
+        <Circle center={[51.51, -0.06]} radius={200} />
       </FeatureGroup>
     </div>
   );
