@@ -1,17 +1,8 @@
-import React, { useState, useEffect, useMemo, useRef} from 'react';
-import { Marker, Popup, Polyline } from 'react-leaflet'
-import { Icon } from 'leaflet';
+import React, { useState, useEffect } from 'react';
+import RunMarker from './RunMarker.js'
 
 const Markers = () => {
   const [ data, setData ] = useState()
-  const [ draggable, setDraggable ] = useState(false)
-  const [ markerID, setSelectedMarker ] = useState(null)  
-  const markerRef = useRef(null)
-
-  const runner = new Icon({
-    iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
-    iconSize: [25, 25]
-  })
 
   useEffect(() => {
       fetch('http://localhost:3000/drawings')
@@ -21,47 +12,8 @@ const Markers = () => {
       })  
   },[])
 
-  const popupDetails = (marker) => {
-    return <div>
-            <span onClick={() => toggleDraggable(marker.id)}>
-              {draggable
-                ? 'Marker is draggable'
-                : 'Click here to make marker draggable'}
-            </span>
-            <span>
-            Markers Details 
-                <ul>
-                <li>Place: {marker.place}</li>
-                <li>Distance From Previous: {marker.distance_from_prev}</li>
-                <li>Polyline: {marker.add_polyline}</li>
-                <li>Latitude: {marker.latitude}</li>
-                </ul>
-            </span>
-          </div>
-  }
-
-  const toggleDraggable = (markerID) => {
-    setSelectedMarker(markerID)
-    if (markerID) {
-      setDraggable(true)
-    }
-  }
-
-  const eventHandlers = useMemo(
-    () => ({
-      dragend() {
-        const marker = markerRef.current
-        if (marker != null) {
-          setPosition(marker.getLatLng())
-          setDraggable(false)
-        }
-      },
-    }),
-    [],
-  )
-
-  const setPosition = ( updatedCoordinates ) => { 
-    fetch(`http://localhost:3000/markers/${markerID}`, {
+  const setPosition = ( updatedCoordinates, markerID) => { 
+    fetch(`http://localhost:3000/markers/${parseInt(markerID)}`, {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json',
@@ -71,35 +23,17 @@ const Markers = () => {
         coordinates: updatedCoordinates 
         })
     })
-        .then(res => res.json())   
+        .then(res => res.json()) 
+        .then(updatedMarker => setData([updatedMarker,...data])) 
   }
 
   return(
     <div>
-      {data 
+      {data
       ?
       <div>
-        {data[0].markers.map((marker, i) => { 
-          debugger
-          return<div>          
-            { marker.add_polyline === null?
-                null:
-              <Polyline key={1} positions={ marker.add_polyline } color={'blue'} />}
-              <Marker 
-                  ref={ markerRef }
-                  eventHandlers={ eventHandlers }
-                  icon={ runner }
-                  key = { marker.id } 
-                  position={ [ marker.latitude, marker.longitude ] }
-                  routeWhileDragging={true}
-                  draggable = { draggable } 
-                  >
-                <Popup minWidth={90}>
-                  {popupDetails(marker)}
-                </Popup>
-              </Marker>
-          </div>
-          })}
+        {data[0].markers.map((marker) => { 
+          return<RunMarker marker={marker} setPosition={setPosition} />})}
       </div>
       : 
       <div>Loading...</div>} 

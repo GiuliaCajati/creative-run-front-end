@@ -45,7 +45,6 @@ const MapToolkit = () => {
           draw={{ rectangle: false }}
         />
         <Circle center={[51.51, -0.06]} radius={200} />
-        {/* <Marker></Marker> */}
       </FeatureGroup>
     </div>
   );
