@@ -21,7 +21,7 @@ const Markers = () => {
       })  
   },[])
 
-  const popupDetails = () => {
+  const popupDetails = (marker) => {
     return <div>
             <span onClick={() => toggleDraggable(marker.id)}>
               {draggable
@@ -95,23 +95,7 @@ const Markers = () => {
                   draggable = { draggable } 
                   >
                 <Popup minWidth={90}>
-                  {popupDetails()}
-                  {/* <div>
-                    <span onClick={() => toggleDraggable(marker.id)}>
-                      {draggable
-                        ? 'Marker is draggable'
-                        : 'Click here to make marker draggable'}
-                    </span>
-                    <span>
-                    Markers Details 
-                        <ul>
-                        <li>Place: {marker.place}</li>
-                        <li>Distance From Previous: {marker.distance_from_prev}</li>
-                        <li>Polyline: {marker.add_polyline}</li>
-                        <li>Latitude: {marker.latitude}</li>
-                        </ul>
-                    </span>
-                  </div> */}
+                  {popupDetails(marker)}
                 </Popup>
               </Marker>
           </div>
