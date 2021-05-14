@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef} from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
-import { Icon } from 'leaflet';
+import React from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet'
 import MapToolkit from '../components/MapToolkit.js'
 import Markers from '../components/Markers.js'
 

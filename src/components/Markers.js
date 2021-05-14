@@ -21,6 +21,25 @@ const Markers = () => {
       })  
   },[])
 
+  const popupDetails = () => {
+    return <div>
+            <span onClick={() => toggleDraggable(marker.id)}>
+              {draggable
+                ? 'Marker is draggable'
+                : 'Click here to make marker draggable'}
+            </span>
+            <span>
+            Markers Details 
+                <ul>
+                <li>Place: {marker.place}</li>
+                <li>Distance From Previous: {marker.distance_from_prev}</li>
+                <li>Polyline: {marker.add_polyline}</li>
+                <li>Latitude: {marker.latitude}</li>
+                </ul>
+            </span>
+          </div>
+  }
+
   const toggleDraggable = (markerID) => {
     setSelectedMarker(markerID)
     if (markerID) {
@@ -42,7 +61,6 @@ const Markers = () => {
   )
 
   const setPosition = ( updatedCoordinates ) => { 
-    debugger
     fetch(`http://localhost:3000/markers/${markerID}`, {
         method: "PATCH",
         headers: {
@@ -62,6 +80,7 @@ const Markers = () => {
       ?
       <div>
         {data[0].markers.map((marker, i) => { 
+          debugger
           return<div>          
             { marker.add_polyline === null?
                 null:
@@ -76,7 +95,8 @@ const Markers = () => {
                   draggable = { draggable } 
                   >
                 <Popup minWidth={90}>
-                  <div>
+                  {popupDetails()}
+                  {/* <div>
                     <span onClick={() => toggleDraggable(marker.id)}>
                       {draggable
                         ? 'Marker is draggable'
@@ -91,7 +111,7 @@ const Markers = () => {
                         <li>Latitude: {marker.latitude}</li>
                         </ul>
                     </span>
-                  </div>
+                  </div> */}
                 </Popup>
               </Marker>
           </div>

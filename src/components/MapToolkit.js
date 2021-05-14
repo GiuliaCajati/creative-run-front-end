@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import 'leaflet-geosearch/dist/geosearch.css';
-import { FeatureGroup, Circle, useMap } from 'react-leaflet'
+import { FeatureGroup, Circle, useMap , Popup, Marker } from 'react-leaflet'
 import { EditControl } from 'react-leaflet-draw';
 import { Icon } from 'leaflet';
 
@@ -16,28 +16,36 @@ const MapToolkit = () => {
     const map = useMap();
     useEffect(() => {
       const provider = new OpenStreetMapProvider();
-      const searchControl = new GeoSearchControl({
-        provider,// marker: { runner }
-      });
+      const searchControl = new GeoSearchControl({ provider });
       map.addControl(searchControl);
       return () => map.removeControl(searchControl);
     }, []);
     return null;
   }
 
+  const setMarker = (e) => {  
+    debugger
+  }
+
   return (
     <div>
       <LeafletgeoSearch />
-      <FeatureGroup>
+      <FeatureGroup >
+        <Popup>
+          <span onClick={(e) => setMarker(e)}>
+            Add to Drawing 
+          </span>
+        </Popup>
         <EditControl
           position='topright'
           marker={{
-              icon: runner,
+              // icon: runner,
               draggable: true
           }}
           draw={{ rectangle: false }}
         />
         <Circle center={[51.51, -0.06]} radius={200} />
+        {/* <Marker></Marker> */}
       </FeatureGroup>
     </div>
   );
