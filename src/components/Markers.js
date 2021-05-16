@@ -24,7 +24,12 @@ const Markers = () => {
         })
     })
         .then(res => res.json()) 
-        .then(updatedMarker => [updatedMarker,...drawings[0].markers]) 
+        .then(updatedMarker => {
+          debugger
+          setDrawings([updatedMarker.drawing])//make modification
+          //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
+          debugger
+        }) 
   }
 
   return(
