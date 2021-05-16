@@ -17,7 +17,6 @@ const RunMarker = (props) => {
             Markers Details 
                 <ul>
                 <li>Place: {marker.place}</li>
-                <li>Distance From Previous: {marker.distance_from_prev}</li>
                 <li>Polyline: {marker.add_polyline}</li>
                 <li>Latitude: {marker.latitude}</li>
                 </ul>

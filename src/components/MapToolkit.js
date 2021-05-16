@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import 'leaflet-geosearch/dist/geosearch.css';
 import { FeatureGroup, Circle, useMap , Popup } from 'react-leaflet'
@@ -6,16 +6,13 @@ import { EditControl } from 'react-leaflet-draw';
 import { Icon } from 'leaflet';
 
 const MapToolkit = () => {
+  const [ place, setRoute ]  = useState()
   const markerRef = useRef(null)
   const runner = new Icon({
     iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
     iconSize: [25, 25]
   })
 
-  //temp state to store drawing 
-  //create on button to create drawing 
-  //
-  
   function LeafletgeoSearch() {
     const map = useMap();
     useEffect(() => {
@@ -27,14 +24,17 @@ const MapToolkit = () => {
     return null;
   }
 
-  const onCreate = (e) => {
-    //e.layer._latlng
-    //if first marker 
-      //start route 
-    
-    debugger 
-    //create marker and add polyline 
-  }
+  // const onCreate = (e) => {
+  //   setRoute(1)
+  //   const markerCoordinates = e.layer._latlng
+  //   if( place = 1 ){
+  //     //create new drawing 
+  //   } else {
+  //     //add to current drawing 
+  //   }    
+  //   debugger 
+  //   //create marker and add polyline 
+  // }
 
   return (
     <div>
