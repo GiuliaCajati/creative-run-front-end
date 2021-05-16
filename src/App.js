@@ -1,9 +1,9 @@
 
 import './App.css';
-import Map from './containers/Map.js'
+import MapPage from './containers/MapPage.js'
 
 export default function App() {
   return (
-    <Map/>
+    <MapPage/>
   );
 }

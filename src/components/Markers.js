@@ -25,10 +25,8 @@ const Markers = () => {
     })
         .then(res => res.json()) 
         .then(updatedMarker => {
-          debugger
           setDrawings([updatedMarker.drawing])//make modification
           //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
-          debugger
         }) 
   }
 
@@ -37,7 +35,8 @@ const Markers = () => {
       {drawings
       ?
       <div>
-        {drawings[0].markers.map((marker) => {
+        {//itterate through each drawing 
+        drawings[0].markers.map((marker) => {
           return<RunMarker marker={marker} setPosition={updatePosition} />})}
       </div>
       : 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef} from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Marker, Popup, Polyline } from 'react-leaflet'
 import { Icon } from 'leaflet';
 
