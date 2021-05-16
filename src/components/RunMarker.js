@@ -29,7 +29,6 @@ const RunMarker = (props) => {
     () => ({
       dragend() {
         const marker = markerRef.current
-        debugger
         if (marker != null) {
           setPosition(marker.getLatLng(), marker.getElement().alt)
         }

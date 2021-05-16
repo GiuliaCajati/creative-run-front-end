@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import RunMarker from './RunMarker.js'
 
 const Markers = () => {
-  const [ data, setData ] = useState()
+  const [ drawings, setDrawings ] = useState()
 
   useEffect(() => {
       fetch('http://localhost:3000/drawings')
       .then(data => data.json())
-      .then(drawings => {
-        setData(drawings);
+      .then(drawings => { 
+        setDrawings(drawings);
       })  
   },[])
 
-  const setPosition = ( updatedCoordinates, markerID) => { 
+  const updatePosition = ( updatedCoordinates, markerID) => { 
     fetch(`http://localhost:3000/markers/${parseInt(markerID)}`, {
         method: "PATCH",
         headers: {
@@ -24,16 +24,16 @@ const Markers = () => {
         })
     })
         .then(res => res.json()) 
-        .then(updatedMarker => setData([updatedMarker,...data])) 
+        .then(updatedMarker => [updatedMarker,...drawings[0].markers]) 
   }
 
   return(
     <div>
-      {data
+      {drawings
       ?
       <div>
-        {data[0].markers.map((marker) => { 
-          return<RunMarker marker={marker} setPosition={setPosition} />})}
+        {drawings[0].markers.map((marker) => {
+          return<RunMarker marker={marker} setPosition={updatePosition} />})}
       </div>
       : 
       <div>Loading...</div>} 
