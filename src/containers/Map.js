@@ -1,11 +1,15 @@
 import React, {useState, useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet'
 import MapToolkit from '../components/MapToolkit.js'
+import CreateDrawingForm from '../components/CreateDrawingForm'
 import RunMarker from '../components/RunMarker.js'
+import Button from '@material-ui/core/Button';
+
 
 const Map = () => {
   const [ drawings, setDrawings ] = useState()
-
+  const [open, setOpen] = useState(false);
+ 
   useEffect(() => {
       fetch('http://localhost:3000/drawings')
       .then(data => data.json())
@@ -13,6 +17,10 @@ const Map = () => {
         setDrawings(drawings);
       })  
   },[])
+
+  const handleClick = () => {
+    setOpen(!open)
+  }
 
   const updatePosition = ( updatedCoordinates, markerID) => { 
     fetch(`http://localhost:3000/markers/${parseInt(markerID)}`, {
@@ -32,23 +40,72 @@ const Map = () => {
         }) 
   }
 
-return(
-    <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-        <MapToolkit/>
-          <div>
-            {drawings
-              ? 
-                <div>
-                {drawings[0].markers.map((marker) => {
-                return<RunMarker marker={marker} setPosition={updatePosition} />})}
-                </div>
-              : 
-                <div>Loading...</div>} 
-          </div>
-        {/* <Markers/> */}
-    </MapContainer>
-  )
+  //working on
+  const createDrawing = ( newDrawing ) => { 
+    debugger
+    fetch(`http://localhost:3000/drawings`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+                'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+        coordinates: newDrawing 
+        })
+    })
+        .then(res => res.json()) 
+        .then(newDrawing => {
+          setDrawings([newDrawing.drawing])//make modification
+          //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
+        }) 
+  }
+
+  //working on
+  const createMarker = ( newMarker ) => { 
+    fetch(`http://localhost:3000/markers`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+                'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+        coordinates: newMarker 
+        })
+    })
+        .then(res => res.json()) 
+        .then(newMarker => {
+          setDrawings([newMarker.drawing])//make modification
+          //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
+        }) 
+  }
+
+  return(
+    <div>
+      <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+          <MapToolkit/>
+            <div>
+              {drawings
+                ? 
+                  <div>
+                  {drawings[0].markers.map((marker) => {
+                  return<RunMarker marker={marker} setPosition={updatePosition} createMarkr={createMarker}/>})}
+                  </div>
+                : 
+                  <div>Loading...</div>} 
+            </div>
+      </MapContainer>
+      <CreateDrawingForm createDrawing={createDrawing} open={open}/>
+      <Button
+        className="graph-button map-filter-button"
+        variant="contained" 
+        onClick={() => handleClick()}
+        >
+          Start Drawing Route
+      </Button>
+    </div>
+      
+    )
 }
 
 export default Map

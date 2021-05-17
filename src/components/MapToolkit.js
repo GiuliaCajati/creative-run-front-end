@@ -5,8 +5,9 @@ import { FeatureGroup, Circle, useMap , Popup } from 'react-leaflet'
 import { EditControl } from 'react-leaflet-draw';
 import { Icon } from 'leaflet';
 
-const MapToolkit = () => {
-  const [ place, setRoute ]  = useState()
+const MapToolkit = (props) => {
+  const [ place, setRoute ]  = useState(1)
+  const createMarker = props.createMarker
   const markerRef = useRef(null)
   const runner = new Icon({
     iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
@@ -27,29 +28,21 @@ const MapToolkit = () => {
   const onCreate = (e) => {
     setRoute(1)
     const markerCoordinates = e.layer._latlng
-    if( place = 1 ){
-      //create new drawing 
-    } else {
-      //add to current drawing 
-    }    
-    debugger 
-    //create marker and add polyline 
+      debugger 
+    let newMarker = {
+      longitude: markerCoordinates.lat,
+      latitude: markerCoordinates.lng,
+      place: place,
+      drawing_id: 2 //drawing ID
+    }
+    createMarker( newMarker )  
+    place++
   }
 
   return (
     <div>
       <LeafletgeoSearch />
       <FeatureGroup >
-        <Popup>
-          <div>
-          <form>
-            <label for="fname">Route Name:</label>
-            <input type="text" id="rname" name="rname">
-            </input>
-            <button>Start Route</button>
-          </form>
-          </div>
-        </Popup>
         <EditControl
           position='topright'
           onCreated={(e)=> onCreate(e)}
