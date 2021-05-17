@@ -24,17 +24,17 @@ const MapToolkit = () => {
     return null;
   }
 
-  // const onCreate = (e) => {
-  //   setRoute(1)
-  //   const markerCoordinates = e.layer._latlng
-  //   if( place = 1 ){
-  //     //create new drawing 
-  //   } else {
-  //     //add to current drawing 
-  //   }    
-  //   debugger 
-  //   //create marker and add polyline 
-  // }
+  const onCreate = (e) => {
+    setRoute(1)
+    const markerCoordinates = e.layer._latlng
+    if( place = 1 ){
+      //create new drawing 
+    } else {
+      //add to current drawing 
+    }    
+    debugger 
+    //create marker and add polyline 
+  }
 
   return (
     <div>

@@ -1,14 +1,52 @@
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet'
 import MapToolkit from '../components/MapToolkit.js'
-import Markers from '../components/Markers.js'
+import RunMarker from '../components/RunMarker.js'
 
 const Map = () => {
+  const [ drawings, setDrawings ] = useState()
+
+  useEffect(() => {
+      fetch('http://localhost:3000/drawings')
+      .then(data => data.json())
+      .then(drawings => { 
+        setDrawings(drawings);
+      })  
+  },[])
+
+  const updatePosition = ( updatedCoordinates, markerID) => { 
+    fetch(`http://localhost:3000/markers/${parseInt(markerID)}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+                'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+        coordinates: updatedCoordinates 
+        })
+    })
+        .then(res => res.json()) 
+        .then(updatedMarker => {
+          setDrawings([updatedMarker.drawing])//make modification
+          //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
+        }) 
+  }
+
 return(
     <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
         <MapToolkit/>
-        <Markers/>
+          <div>
+            {drawings
+              ? 
+                <div>
+                {drawings[0].markers.map((marker) => {
+                return<RunMarker marker={marker} setPosition={updatePosition} />})}
+                </div>
+              : 
+                <div>Loading...</div>} 
+          </div>
+        {/* <Markers/> */}
     </MapContainer>
   )
 }
