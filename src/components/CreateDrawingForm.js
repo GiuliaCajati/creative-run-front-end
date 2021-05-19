@@ -12,7 +12,6 @@ const CreateDrawingForm = (props) => {
   const openForm = props.open
 
   const handleChange = (event) => {
-    debugger
     let {id , value} = event.target 
     setDrawing(prevState => ({
         ...prevState,

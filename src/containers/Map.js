@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 
 const Map = () => {
   const [ drawings, setDrawings ] = useState()
+  const [ drawingID, setDrawing ] = useState()
   const [open, setOpen] = useState(false);
  
   useEffect(() => {
@@ -40,23 +41,18 @@ const Map = () => {
         }) 
   }
 
-  //working on
   const createDrawing = ( newDrawing ) => { 
-    debugger
     fetch(`http://localhost:3000/drawings`, {
-        method: "PUT",
+        method: "POST",
         headers: {
             'Content-Type': 'application/json',
                 'Accept': 'application/json'
         },
-        body: JSON.stringify({
-        coordinates: newDrawing 
-        })
+        body: JSON.stringify( newDrawing )
     })
         .then(res => res.json()) 
         .then(newDrawing => {
-          setDrawings([newDrawing.drawing])//make modification
-          //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
+          setDrawing( newDrawing )
         }) 
   }
 
@@ -83,7 +79,7 @@ const Map = () => {
     <div>
       <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-          <MapToolkit/>
+          <MapToolkit drawingID={drawingID}/>
             <div>
               {drawings
                 ? 

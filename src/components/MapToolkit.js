@@ -8,6 +8,7 @@ import { Icon } from 'leaflet';
 const MapToolkit = (props) => {
   const [ place, setRoute ]  = useState(1)
   const createMarker = props.createMarker
+  const drawingID = props.drawingID
   const markerRef = useRef(null)
   const runner = new Icon({
     iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
@@ -27,13 +28,14 @@ const MapToolkit = (props) => {
 
   const onCreate = (e) => {
     setRoute(1)
+    
     const markerCoordinates = e.layer._latlng
       debugger 
     let newMarker = {
       longitude: markerCoordinates.lat,
       latitude: markerCoordinates.lng,
       place: place,
-      drawing_id: 2 //drawing ID
+      drawing_id: drawingID 
     }
     createMarker( newMarker )  
     place++
