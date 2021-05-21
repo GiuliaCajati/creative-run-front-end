@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 const Map = () => {
   const [ drawings, setDrawings ] = useState()
-  const [ drawingID, setDrawing ] = useState()
+  const [ newDrawingID, setDrawing ] = useState()
   const [open, setOpen] = useState(false);
  
   useEffect(() => {
@@ -20,7 +20,7 @@ const Map = () => {
   },[])
 
   const handleClick = () => {
-    setOpen(!open)
+    setOpen(true)
   }
 
   const updatePosition = ( updatedCoordinates, markerID) => { 
@@ -51,13 +51,15 @@ const Map = () => {
         body: JSON.stringify( newDrawing )
     })
         .then(res => res.json()) 
-        .then(newDrawing => {
-          setDrawing( newDrawing )
+        .then(newDrawingID => {
+          debugger
+          setDrawing( [newDrawingID] )
         }) 
   }
 
   //working on
   const createMarker = ( newMarker ) => { 
+    debugger
     fetch(`http://localhost:3000/markers`, {
         method: "PUT",
         headers: {
@@ -79,7 +81,7 @@ const Map = () => {
     <div>
       <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-          <MapToolkit drawingID={drawingID}/>
+          <MapToolkit newDrawingID={newDrawingID}/>
             <div>
               {drawings
                 ? 
@@ -91,13 +93,19 @@ const Map = () => {
                   <div>Loading...</div>} 
             </div>
       </MapContainer>
-      <CreateDrawingForm createDrawing={createDrawing} open={open}/>
+      <CreateDrawingForm createDrawing={createDrawing} open={open} setOpen={setOpen}/>
       <Button
         className="graph-button map-filter-button"
         variant="contained" 
         onClick={() => handleClick()}
         >
           Start Drawing Route
+      </Button>
+      <Button
+        className="graph-button map-filter-button"
+        variant="contained" 
+        >
+          {newDrawingID}
       </Button>
     </div>
       

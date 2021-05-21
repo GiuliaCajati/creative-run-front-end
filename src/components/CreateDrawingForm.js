@@ -10,6 +10,7 @@ const CreateDrawingForm = (props) => {
   const [newDrawing, setDrawing] = useState({name: ""})
   const createDrawing = props.createDrawing
   const openForm = props.open
+  const setOpen = props.setOpen
 
   const handleChange = (event) => {
     let {id , value} = event.target 
@@ -21,7 +22,10 @@ const CreateDrawingForm = (props) => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    createDrawing(newDrawing)
+    setOpen(false)
+    if(newDrawing.name !== ""){
+      return createDrawing(newDrawing)
+    }
   }
 
   return(<div>
