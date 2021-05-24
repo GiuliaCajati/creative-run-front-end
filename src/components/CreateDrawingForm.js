@@ -7,7 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 const CreateDrawingForm = (props) => {
-  const [newDrawing, setDrawing] = useState({name: ""})
+  const [ place, setPlace ]  = useState(1)
+  const [ newDrawing, setDrawing ] = useState({name: ""})
   const createDrawing = props.createDrawing
   const openForm = props.open
   const setOpen = props.setOpen
@@ -23,7 +24,8 @@ const CreateDrawingForm = (props) => {
   const handleClick = (e) => {
     e.preventDefault();
     setOpen(false)
-    if(newDrawing.name !== ""){
+    if(newDrawing.name !== "" && place === 1 ){
+      setPlace(place + 1)
       return createDrawing(newDrawing)
     }
   }

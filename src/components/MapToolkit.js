@@ -6,9 +6,8 @@ import { EditControl } from 'react-leaflet-draw';
 import { Icon } from 'leaflet';
 
 const MapToolkit = (props) => { 
-  const [ place, setRoute ]  = useState(1)
-  const createMarker = props.createMarker
-  const drawingID = props.newDrawingID
+  const createMarker = props.createMarker 
+  // const drawingID = props.newDrawingID
   const markerRef = useRef(null)
   const runner = new Icon({
     iconUrl:'https://upload.wikimedia.org/wikipedia/commons/b/b0/Running_icon_-_Noun_Project_17825.svg',
@@ -26,21 +25,28 @@ const MapToolkit = (props) => {
     return null;
   }
 
+  // const onCreate = (e) => {
+  //   debugger
+  //   if(drawingID !== undefined){
+  //     const markerCoordinates = e.layer._latlng
+  //       debugger 
+  //     let newMarker = {
+  //       longitude: markerCoordinates.lat,
+  //       latitude: markerCoordinates.lng,
+  //       // place: place,
+  //       drawing_id: drawingID 
+  //     }
+  //     createMarker( newMarker )  
+  //   }
+  // }
+
   const onCreate = (e) => {
-    debugger
-    if(drawingID !== undefined){
-      setRoute(1) // change with new drawingID
-      const markerCoordinates = e.layer._latlng
-        debugger 
-      let newMarker = {
-        longitude: markerCoordinates.lat,
-        latitude: markerCoordinates.lng,
-        place: place,
-        drawing_id: drawingID 
-      }
-      createMarker( newMarker )  
-      place++
+    const markerCoordinates = e.layer._latlng
+    let newMarkerCoord = {
+      longitude: markerCoordinates.lat,
+      latitude: markerCoordinates.lng,
     }
+    return createMarker( newMarkerCoord ) 
   }
 
   return (

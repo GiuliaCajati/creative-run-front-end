@@ -40,7 +40,7 @@ const RunMarker = (props) => {
     <div>          
       { marker.add_polyline === null?
           null:
-        <Polyline key = { marker.id } positions={ marker.add_polyline } color={'blue'} />}
+        <Polyline key = { marker.id + 1 } positions={ marker.add_polyline } color={'blue'} />}
         <Marker 
             alt = { marker.id }
             ref={ markerRef }

@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 const Map = () => {
   const [ drawings, setDrawings ] = useState()
   const [ newDrawingID, setDrawing ] = useState()
-  const [open, setOpen] = useState(false);
+  const [ open, setOpen ] = useState(false);
  
   useEffect(() => {
       fetch('http://localhost:3000/drawings')
@@ -34,34 +34,38 @@ const Map = () => {
         coordinates: updatedCoordinates 
         })
     })
-        .then(res => res.json()) 
+        .then(res => res.json())
         .then(updatedMarker => {
           setDrawings([updatedMarker.drawing])//make modification
           //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
         }) 
   }
 
+  
+
   const createDrawing = ( newDrawing ) => { 
-    fetch(`http://localhost:3000/drawings`, {
+    fetch('http://localhost:3000/drawings', {
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-                'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( newDrawing )
     })
-        .then(res => res.json()) 
-        .then(newDrawingID => {
+        .then(res => res.json())
+        .then(newDrawing =>{
           debugger
-          setDrawing( [newDrawingID] )
-        }) 
+          setDrawings(...drawings, newDrawing)
+        })
+        // .then(newDrawing => {
+        //   debugger
+        //   setDrawing( [newDrawing.id] )
+        // }) 
   }
 
-  //working on
+  // //working on
   const createMarker = ( newMarker ) => { 
     debugger
+    //newDrawingID & place
     fetch(`http://localhost:3000/markers`, {
-        method: "PUT",
+        method: "POST",
         headers: {
             'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -81,13 +85,18 @@ const Map = () => {
     <div>
       <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-          <MapToolkit newDrawingID={newDrawingID}/>
+          <MapToolkit 
+            //newDrawingID={newDrawingID} 
+            createMarker={createMarker} />
             <div>
               {drawings
                 ? 
                   <div>
                   {drawings[0].markers.map((marker) => {
-                  return<RunMarker marker={marker} setPosition={updatePosition} createMarkr={createMarker}/>})}
+                  return<RunMarker marker={marker} 
+                  setPosition={updatePosition} 
+                  // createMarkr={createMarker}
+                  />})}
                   </div>
                 : 
                   <div>Loading...</div>} 
