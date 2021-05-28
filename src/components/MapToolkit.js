@@ -25,23 +25,10 @@ const MapToolkit = (props) => {
     return null;
   }
 
-  // const onCreate = (e) => {
-  //   debugger
-  //   if(drawingID !== undefined){
-  //     const markerCoordinates = e.layer._latlng
-  //       debugger 
-  //     let newMarker = {
-  //       longitude: markerCoordinates.lat,
-  //       latitude: markerCoordinates.lng,
-  //       // place: place,
-  //       drawing_id: drawingID 
-  //     }
-  //     createMarker( newMarker )  
-  //   }
-  // }
-
   const onCreate = (e) => {
     const markerCoordinates = e.layer._latlng
+    // drawingID
+    //place
     let newMarkerCoord = {
       longitude: markerCoordinates.lat,
       latitude: markerCoordinates.lng,

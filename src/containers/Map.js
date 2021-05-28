@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 
 const Map = () => {
   const [ drawings, setDrawings ] = useState()
-  const [ newDrawingID, setDrawing ] = useState()
   const [ open, setOpen ] = useState(false);
  
   useEffect(() => {
@@ -52,12 +51,8 @@ const Map = () => {
         .then(res => res.json())
         .then(newDrawing =>{
           debugger
-          setDrawings(...drawings, newDrawing)
+          setDrawings([...drawings, newDrawing])
         })
-        // .then(newDrawing => {
-        //   debugger
-        //   setDrawing( [newDrawing.id] )
-        // }) 
   }
 
   // //working on
@@ -85,8 +80,7 @@ const Map = () => {
     <div>
       <MapContainer center={[38.9072, -77.0369]} zoom={13} stroke={true}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-          <MapToolkit 
-            //newDrawingID={newDrawingID} 
+          <MapToolkit  
             createMarker={createMarker} />
             <div>
               {drawings
@@ -94,8 +88,6 @@ const Map = () => {
                   <div>
                   {drawings[0].markers.map((marker) => {
                   return<RunMarker marker={marker} 
-                  setPosition={updatePosition} 
-                  // createMarkr={createMarker}
                   />})}
                   </div>
                 : 
@@ -109,12 +101,6 @@ const Map = () => {
         onClick={() => handleClick()}
         >
           Start Drawing Route
-      </Button>
-      <Button
-        className="graph-button map-filter-button"
-        variant="contained" 
-        >
-          {newDrawingID}
       </Button>
     </div>
       
