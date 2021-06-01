@@ -57,7 +57,6 @@ const Map = () => {
 
   // //working on
   const createMarker = ( newMarker ) => { 
-    debugger
     //newDrawingID & place
     fetch(`http://localhost:3000/markers`, {
         method: "POST",
@@ -71,6 +70,7 @@ const Map = () => {
     })
         .then(res => res.json()) 
         .then(newMarker => {
+          debugger
           setDrawings([newMarker.drawing])//make modification
           //setDrawings([updatedMarker, ...drawings[0].markers.filter(marker => marker.id !== updatedMarker.id)])
         }) 
@@ -87,7 +87,9 @@ const Map = () => {
                 ? 
                   <div>
                   {drawings[0].markers.map((marker) => {
-                  return<RunMarker marker={marker} 
+                  return<RunMarker 
+                  setPosition={updatePosition}
+                  marker={marker} 
                   />})}
                   </div>
                 : 
